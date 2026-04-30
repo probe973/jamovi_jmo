@@ -7,13 +7,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build jamovi module
-        uses: jamovi/jamovi-action@master
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
         with:
-          command: build
+          r-version: '4.1.2' # jamovi is most stable on this version
 
-      - name: Upload .jmo
+      - name: Install dependencies
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org"))
+          install.packages('remotes')
+          remotes::install_github('jamovi/jmvtools')
+          install.packages('jmvcore')
+        shell: Rscript {0}
+
+      - name: Build Module
+        run: |
+          library(jmvtools)
+          # This is the command used by GAMLj and others to force a build
+          # It creates a 'dist' folder with your .jmo file inside
+          jmvtools::check(home='.') 
+        shell: Rscript {0}
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: windows-module
-          path: ./*.jmo
+          path: "**/*.jmo"
