@@ -1,4 +1,4 @@
-name: Build jamovi module
+name: Build jamovi JMO (Windows)
 
 on:
   push:
@@ -19,19 +19,20 @@ jobs:
             CRAN = "https://cloud.r-project.org",
             jamovi = "https://repo.jamovi.org"
           ))
+
           install.packages(c("jmvcore", "jmvtools"))
+
           jmvtools::install(".")
 
-          # locate the installed jmo
           lib <- .libPaths()[1]
-          jmo <- list.files(
-            file.path(lib, "jmv"),
-            recursive = TRUE,
-            pattern = "\\.jmo$",
-            full.names = TRUE
-          )[1]
 
-          # copy it into the repo
+          jmo <- list.files(
+            path = file.path(lib, "jmv"),
+            pattern = "\\.jmo$",
+            recursive = TRUE,
+            full.names = TRUE
+          )
+
           file.copy(jmo, ".", overwrite = TRUE)
 
       - uses: actions/upload-artifact@v4
