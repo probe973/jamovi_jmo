@@ -1,0 +1,60 @@
+---
+name:  rci
+title: Reliable Change
+menuGroup: LET
+version: '1.0.0'
+jas: '1.2'
+
+options:
+    - name: data
+      type: Data
+
+    - name: pre
+      title: Pre-test Variable
+      type: Variable
+      suggested: [continuous]
+
+    - name: post
+      title: Post-test Variable
+      type: Variable
+      suggested: [continuous]
+
+    - name: reliability
+      title: Reliability Coefficient
+      type: Number
+      default: 0.80
+
+    - name: useClinicalChange
+      title: Add Clinical Significance Analysis
+      type: Bool
+      default: false
+
+    - name: method
+      title: Clinical Significance Method
+      type: List
+      options:
+        - title: Criterion A (2 SD from Clinical Mean)
+          name: critA
+        - title: Criterion B (2 SD from Normal Mean)
+          name: critB
+        - title: Criterion C (Midpoint/Reliable)
+          name: critC
+        - title: Criterion D (User Specified)
+          name: critD
+      default: critC
+
+    - name: normalMean
+      title: Normal Mean
+      type: Number
+    
+    - name: normalSd
+      title: Normal SD
+      type: Number
+
+    - name: clinicalMean
+      title: Clinical Mean
+      type: Number
+
+    - name: clinicalSd
+      title: Clinical SD
+      type: Number
