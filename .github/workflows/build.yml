@@ -17,13 +17,13 @@ jobs:
         run: |
           install.packages(
             "jmvtools",
-            repos=c("https://repo.jamovi.org","https://cloud.r-project.org")
+            repos = c("https://repo.jamovi.org", "https://cloud.r-project.org")
           )
 
       - name: Build module
         shell: Rscript {0}
         run: |
-          jmvtools::build()
+          jmvtools::install(".")
 
       - uses: actions/upload-artifact@v4
         with:
