@@ -23,7 +23,7 @@ jobs:
       - name: Build module
         shell: Rscript {0}
         run: |
-          jmvtools::install(".")
+          jmvtools::install(".", path = ".")
 
       - uses: actions/upload-artifact@v4
         with:
