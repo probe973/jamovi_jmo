@@ -15,12 +15,13 @@ jobs:
           repos <- c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org")
           install.packages(c('jmvcore', 'jmvtools'), repos=repos)
           library(jmvtools)
-          # 'check' is the correct command to build the .jmo file in the current folder
-          jmvtools::check() 
-        shell: Rscript {0}
+          jmvtools::check()
+          # This command finds the .jmo file and moves it to the main folder
+          Get-ChildItem -Path . -Filter *.jmo -Recurse | Move-Item -Destination . -Force
+        shell: pwsh
 
       - name: Upload .jmo File
         uses: actions/upload-artifact@v4
         with:
           name: windows-module
-          path: "./*.jmo"
+          path: "*.jmo"
