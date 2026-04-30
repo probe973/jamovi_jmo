@@ -1,12 +1,11 @@
 Package: LET
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.0.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Reliable and Clinical Significant Change
+Version: 0.1.0
+Author: Phil Roberts
+Maintainer: Phil Roberts <your.email@example.com>
+Description: Analysis for Reliable Change Index and Clinical Significance.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: jmvcore (>= 0.8.5), R6
+Imports: jmvcore (>= 0.8.5), R6, ggplot2
