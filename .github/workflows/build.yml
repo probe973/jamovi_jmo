@@ -6,37 +6,30 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
 
-      - name: Build jmo
-        shell: Rscript {0}
+      - name: Install dependencies
         run: |
-          options(repos = c(
-            CRAN = "https://cloud.r-project.org",
-            jamovi = "https://repo.jamovi.org"
-          ))
+          Rscript -e 'options(repos=c(CRAN="https://cloud.r-project.org", jamovi="https://repo.jamovi.org")); install.packages(c("jmvcore","jmvtools"))'
 
-          install.packages(c("jmvcore", "jmvtools"))
+      - name: Build module
+        run: |
+          Rscript -e 'jmvtools::install(".", build=TRUE)'
 
-          jmvtools::install(".")
-
-          lib <- .libPaths()[1]
-          jmo_files <- list.files(
-            path = file.path(lib, "jmv"),
-            recursive = TRUE,
-            pattern = "\\.jmo$",
-            full.names = TRUE
-          )
-
-          file.copy(jmo_files, getwd(), overwrite = TRUE)
+      - name: Find .jmo
+        run: |
+          find $HOME -name "*.jmo"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: jamovi-module
-          path: "*.jmo"
+          path: |
+            ~/.local/share/R/*
+            ~/R/*
+            **/*.jmo
