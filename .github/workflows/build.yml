@@ -13,23 +13,28 @@ jobs:
 
       - uses: r-lib/actions/setup-r@v2
 
-      - name: Install dependencies
+      - name: Install jmvtools
         run: |
           Rscript -e 'options(repos=c(CRAN="https://cloud.r-project.org", jamovi="https://repo.jamovi.org")); install.packages(c("jmvcore","jmvtools"))'
 
-      - name: Build module
+      - name: Prepare module
         run: |
-          Rscript -e 'jmvtools::install(".", build=TRUE)'
+          Rscript -e 'jmvtools::prepare()'
 
-      - name: Find .jmo
+      - name: Install module (forces build)
         run: |
-          find $HOME -name "*.jmo"
+          Rscript -e 'jmvtools::install(".", lib="module-lib")'
+
+      - name: Locate .jmo
+        run: |
+          find module-lib -name "*.jmo" -print
+
+      - name: Copy .jmo
+        run: |
+          cp $(find module-lib -name "*.jmo" | head -n 1) ./module.jmo
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: jamovi-module
-          path: |
-            ~/.local/share/R/*
-            ~/R/*
-            **/*.jmo
+          path: module.jmo
