@@ -12,8 +12,14 @@ jobs:
 
       - name: Install and Build
         run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
-          install.packages('jmvtools', repos='https://repo.jamovi.org')
+          # Define both the standard R repo and the jamovi repo
+          repos <- c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org")
+          
+          # Install the core pieces first, then the tools
+          install.packages('jmvcore', repos=repos)
+          install.packages('jmvtools', repos=repos)
+          
+          # Now try to build your module
           library(jmvtools)
           jmvtools::install()
         shell: Rscript {0}
