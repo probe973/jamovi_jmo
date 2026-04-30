@@ -15,8 +15,8 @@ jobs:
           repos <- c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org")
           install.packages(c('jmvcore', 'jmvtools'), repos=repos)
           library(jmvtools)
-          # This line forces the .jmo to be created right in your main folder
-          jmvtools::make() 
+          # 'check' is the correct command to build the .jmo file in the current folder
+          jmvtools::check() 
         shell: Rscript {0}
 
       - name: Upload .jmo File
