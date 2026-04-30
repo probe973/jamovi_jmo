@@ -26,16 +26,17 @@ jobs:
           jmvtools::install(".")
 
           lib <- .libPaths()[1]
-          jmo <- list.files(
-            file.path(lib, "jmv"),
+          jmo_files <- list.files(
+            path = file.path(lib, "jmv"),
             recursive = TRUE,
             pattern = "\\.jmo$",
             full.names = TRUE
           )
 
-          file.copy(jmo, ".", overwrite = TRUE)
+          file.copy(jmo_files, getwd(), overwrite = TRUE)
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
           name: jamovi-module
           path: "*.jmo"
