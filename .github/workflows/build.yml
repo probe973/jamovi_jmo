@@ -1,7 +1,8 @@
-name: Build jamovi JMO (Windows)
+name: Build jamovi module
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,11 +26,10 @@ jobs:
           jmvtools::install(".")
 
           lib <- .libPaths()[1]
-
           jmo <- list.files(
-            path = file.path(lib, "jmv"),
-            pattern = "\\.jmo$",
+            file.path(lib, "jmv"),
             recursive = TRUE,
+            pattern = "\\.jmo$",
             full.names = TRUE
           )
 
@@ -39,4 +39,3 @@ jobs:
         with:
           name: jamovi-module
           path: "*.jmo"
-``
