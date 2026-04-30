@@ -1,32 +1,29 @@
-name: Build jamovi module
-
-on:
-  push:
+name: Build Windows Module
+on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: r-lib/actions/setup-r@v2
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
 
-      - name: Install jmvtools
-        shell: Rscript {0}
+      - name: Build Module
         run: |
-          install.packages(
-            "jmvtools",
-            repos = c("https://repo.jamovi.org", "https://cloud.r-project.org")
-          )
-
-      - name: Build module
+          options(repos = c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org"))
+          # We install pkgbuild because it's a reliable, standard R tool
+          install.packages(c('jmvcore', 'jmvtools', 'pkgbuild'))
+          library(jmvtools)
+          # 1. Prepare the jamovi-specific R files
+          jmvtools::prepare()
+          # 2. Build the package into a .zip file in the current folder
+          pkgbuild::build(binary = TRUE, dest_path = ".")
         shell: Rscript {0}
-        run: |
-          setwd(getwd())
-          jmvtools::install(".")
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: jamovi-module
-          path: "*.jmo"
+          name: windows-module
+          path: "./*.zip"
