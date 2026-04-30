@@ -14,8 +14,10 @@ jobs:
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org"))
           install.packages(c('jmvcore', 'jmvtools'))
-          # This command specifically generates the .jmo file for distribution
-          jmvtools::build()
+          library(jmvtools)
+          # Create a local folder and tell R to install the module there
+          dir.create('temp_build')
+          jmvtools::install(pkg='.', lib='temp_build')
         shell: Rscript {0}
 
       - name: Upload .jmo File
