@@ -12,20 +12,15 @@ jobs:
 
       - name: Install and Build
         run: |
-          # Define both the standard R repo and the jamovi repo
           repos <- c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org")
-          
-          # Install the core pieces first, then the tools
-          install.packages('jmvcore', repos=repos)
-          install.packages('jmvtools', repos=repos)
-          
-          # Now try to build your module
+          install.packages(c('jmvcore', 'jmvtools'), repos=repos)
           library(jmvtools)
-          jmvtools::install()
+          # This line forces the .jmo to be created right in your main folder
+          jmvtools::make() 
         shell: Rscript {0}
 
       - name: Upload .jmo File
         uses: actions/upload-artifact@v4
         with:
           name: windows-module
-          path: "build/*.jmo"
+          path: "./*.jmo"
