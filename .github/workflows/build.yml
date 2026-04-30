@@ -15,11 +15,12 @@ jobs:
           options(repos = c(CRAN = "https://cloud.r-project.org", jamovi = "https://repo.jamovi.org"))
           install.packages(c('jmvcore', 'jmvtools'))
           library(jmvtools)
-          jmvtools::check()
+          # pkgFile = TRUE is the specific instruction to generate the .jmo file
+          jmvtools::install(pkgFile=TRUE)
         shell: Rscript {0}
 
       - name: Upload .jmo File
         uses: actions/upload-artifact@v4
         with:
           name: windows-module
-          path: "**/*.jmo"
+          path: "./*.jmo"
